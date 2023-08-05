@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/Windmill787-golang/junior-test/entities"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,7 +19,7 @@ func (h *Handler) GetBook(c *gin.Context) {
 
 	book, err := h.service.GetBook(id)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error: " + err.Error()})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
 		return
 	}
 
@@ -28,4 +29,31 @@ func (h *Handler) GetBook(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, book)
+}
+
+func (h *Handler) GetBooks(c *gin.Context) {
+	books, err := h.service.GetBooks()
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, books)
+}
+
+func (h *Handler) CreateBook(c *gin.Context) {
+	var book entities.Book
+
+	if err := c.BindJSON(&book); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Validation error " + err.Error()})
+		return
+	}
+
+	id, err := h.service.CreateBook(book)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Book created", "id": id})
 }

@@ -8,6 +8,8 @@ import (
 
 type Book interface {
 	GetBook(id int) (*entities.Book, error)
+	GetBooks() ([]*entities.Book, error)
+	CreateBook(entities.Book) (int, error)
 }
 
 type Repository struct {

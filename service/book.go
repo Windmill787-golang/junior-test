@@ -16,3 +16,11 @@ func NewBookService(repo repository.Book) *BookService {
 func (s *BookService) GetBook(id int) (*entities.Book, error) {
 	return s.repo.GetBook(id)
 }
+
+func (s *BookService) GetBooks() ([]*entities.Book, error) {
+	return s.repo.GetBooks()
+}
+
+func (s *BookService) CreateBook(book entities.Book) (int, error) {
+	return s.repo.CreateBook(book)
+}

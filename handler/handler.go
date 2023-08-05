@@ -18,6 +18,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
 	router.GET("/book/:id", h.GetBook)
+	router.GET("/books", h.GetBooks)
+	router.POST("/book", h.CreateBook)
 
 	return router
 }
