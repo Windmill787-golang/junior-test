@@ -14,5 +14,5 @@ func NewBookService(repo repository.Book) *BookService {
 }
 
 func (s *BookService) GetBook(id int) (*entities.Book, error) {
-	return &entities.Book{}, nil
+	return s.repo.GetBook(id)
 }

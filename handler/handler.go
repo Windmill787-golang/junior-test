@@ -15,5 +15,9 @@ func NewHandler(service *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	//create routes for book
-	return gin.Default()
+	router := gin.New()
+
+	router.GET("/book/:id", h.GetBook)
+
+	return router
 }

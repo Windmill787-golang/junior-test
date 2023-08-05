@@ -27,7 +27,6 @@ func main() {
 		os.Getenv("DB_DATABASE"),
 		os.Getenv("DB_SSLMODE"),
 	)
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +40,7 @@ func main() {
 	//create handler that depends on service
 	handler := handler.NewHandler(service)
 
-	//run server
+	//create and run server that depends on handler routes
 	server := NewServer()
 	if err = server.Run(os.Getenv("SERVER_PORT"), handler.InitRoutes()); err != nil {
 		log.Fatal(err)

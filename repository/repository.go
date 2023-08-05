@@ -16,6 +16,6 @@ type Repository struct {
 
 func NewRepository(db *sql.DB) *Repository {
 	return &Repository{
-		Book: NewBook(db),
+		Book: NewBookRepository(db),
 	}
 }

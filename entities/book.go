@@ -10,3 +10,7 @@ type Book struct {
 	ReleaseDate string `json:"release_date"`
 	Price       int    `json:"price"`
 }
+
+func NewBook() *Book {
+	return &Book{}
+}
