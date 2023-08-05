@@ -1,26 +1,49 @@
 package main
 
-func main() {
-	//Book
-	//id, title, description, genre, author, page_count, release_date, price
-	//id serial not null unique
-	//title varchar(255) not null
-	//description text not null
-	//genre varchar(255) not null
-	//author varchar(255) not null
-	//page_count int not null
-	//release_date date not null
-	//price int not null
+import (
+	"log"
+	"os"
 
+	"github.com/Windmill787-golang/junior-test/handler"
+	"github.com/Windmill787-golang/junior-test/repository"
+	"github.com/Windmill787-golang/junior-test/service"
+	"github.com/joho/godotenv"
+)
+
+func main() {
 	//repository<-service<-handlers<-routes<-server
 
 	//load environment
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
 
 	//init database
+	db, err := repository.NewPostgres(
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+		os.Getenv("DB_USERNAME"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_DATABASE"),
+		os.Getenv("DB_SSLMODE"),
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//create repository that depents on database
+	repository := repository.NewRepository(db)
+
 	//create service that depends on repository
+	service := service.NewService(repository)
+
 	//create handler that depends on service
+	handler := handler.NewHandler(service)
 
 	//run server
+	server := NewServer()
+	if err = server.Run("8000", handler.InitRoutes()); err != nil {
+		log.Fatal(err)
+	}
 }

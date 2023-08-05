@@ -13,7 +13,7 @@ func NewHandler(service *service.Service) *Handler {
 	return &Handler{service}
 }
 
-func InitRoutes() *gin.Engine {
+func (h *Handler) InitRoutes() *gin.Engine {
 	//create routes for book
 	return gin.Default()
 }

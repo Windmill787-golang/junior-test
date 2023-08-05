@@ -13,7 +13,7 @@ type Service struct {
 	Book
 }
 
-func NewService(repo repository.Repository) *Service {
+func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		Book: NewBookService(repo.Book),
 	}
