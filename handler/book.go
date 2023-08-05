@@ -9,11 +9,9 @@ import (
 )
 
 func (h *Handler) GetBook(c *gin.Context) {
-	//get id from context
-	//json indent book
 	id, _ := strconv.Atoi(c.Param("id"))
 	if id == 0 {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book not found"})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "ID is not provided"})
 		return
 	}
 
@@ -56,4 +54,40 @@ func (h *Handler) CreateBook(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Book created", "id": id})
+}
+
+func (h *Handler) UpdateBook(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	if id == 0 {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "ID is not provided"})
+		return
+	}
+
+	var book entities.Book
+	if err := c.BindJSON(&book); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Validation error " + err.Error()})
+		return
+	}
+
+	if err := h.service.UpdateBook(book); err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Book updated"})
+}
+
+func (h *Handler) DeleteBook(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	if id == 0 {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "ID is not provided"})
+		return
+	}
+
+	if err := h.service.DeleteBook(id); err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Book deleted"})
 }

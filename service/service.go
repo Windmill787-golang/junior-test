@@ -8,7 +8,9 @@ import (
 type Book interface {
 	GetBook(id int) (*entities.Book, error)
 	GetBooks() ([]*entities.Book, error)
-	CreateBook(entities.Book) (int, error)
+	CreateBook(book entities.Book) (int, error)
+	UpdateBook(book entities.Book) error
+	DeleteBook(id int) error
 }
 
 type Service struct {

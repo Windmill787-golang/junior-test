@@ -65,3 +65,28 @@ func (r *BookRepository) CreateBook(book entities.Book) (int, error) {
 
 	return id, nil
 }
+
+func (r *BookRepository) UpdateBook(book entities.Book) error {
+	sql := fmt.Sprintf("UPDATE %s SET "+
+		"title=$1, description=$2, genre=$3, author=$4, page_count=$5,"+
+		"release_date=$6, price=$7) WHERE id=$8",
+		booksTable,
+	)
+
+	_, err := r.db.Exec(sql, book.Title, book.Description, book.Genre, book.Author, book.PageCount, book.ReleaseDate, book.Price, book.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *BookRepository) DeleteBook(id int) error {
+	sql := fmt.Sprintf("DELETE FROM %s WHERE id=$1", booksTable)
+	_, err := r.db.Exec(sql, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
