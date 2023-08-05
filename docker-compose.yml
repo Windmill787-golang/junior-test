@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: junior_test_psql
+    ports:
+      - ${DB_PORT}:5432
+    image: postgres
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes: 
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+    driver: local
