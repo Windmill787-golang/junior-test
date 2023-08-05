@@ -43,7 +43,7 @@ func main() {
 
 	//run server
 	server := NewServer()
-	if err = server.Run("8000", handler.InitRoutes()); err != nil {
+	if err = server.Run(os.Getenv("SERVER_PORT"), handler.InitRoutes()); err != nil {
 		log.Fatal(err)
 	}
 }
