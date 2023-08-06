@@ -16,6 +16,7 @@ type Book interface {
 
 type Auth interface {
 	CreateUser(user entities.User) (int, error)
+	GetUserId(username, password_hash string) (int, error)
 }
 
 type Repository struct {

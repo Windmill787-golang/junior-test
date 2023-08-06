@@ -28,3 +28,18 @@ func (r *AuthRepository) CreateUser(user entities.User) (int, error) {
 
 	return id, nil
 }
+
+func (r *AuthRepository) GetUserId(username, password_hash string) (int, error) {
+	row := r.db.QueryRow(fmt.Sprintf("SELECT id FROM %s WHERE username = $1 AND password_hash = $2", usersTable), username, password_hash)
+
+	var id int
+
+	if err := row.Scan(&id); err != nil {
+		if err == sql.ErrNoRows {
+			return 0, nil
+		}
+		return 0, err
+	}
+
+	return id, nil
+}

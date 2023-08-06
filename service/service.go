@@ -15,6 +15,7 @@ type Book interface {
 
 type Auth interface {
 	CreateUser(user entities.User) (int, error)
+	GenerateToken(use entities.User) (string, error)
 }
 
 type Service struct {
