@@ -20,7 +20,7 @@ func (r *BookRepository) GetBook(id int) (*entities.Book, error) {
 
 	book := entities.NewBook()
 
-	if err := row.Scan(&book.ID, &book.Title, &book.Description, &book.Genre, &book.Author, &book.PageCount, &book.Year, &book.Price, &book.CreatedAt, &book.UpdatedAt); err != nil {
+	if err := row.Scan(&book.ID, &book.Title, &book.Description, &book.Genre, &book.Author, &book.PageCount, &book.Year, &book.Price, &book.CreatedAt, &book.UpdatedAt, &book.UserId); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
@@ -73,8 +73,6 @@ func (r *BookRepository) UpdateBook(book entities.Book) error {
 		booksTable,
 	)
 
-	fmt.Println(book)
-	fmt.Println(sql)
 	_, err := r.db.Exec(sql, book.Title, book.Description, book.Genre, book.Author, book.PageCount, book.Year, book.Price, book.ID)
 	if err != nil {
 		return err

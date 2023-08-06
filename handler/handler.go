@@ -26,5 +26,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		book.DELETE("/:id", h.DeleteBook)
 	}
 
+	user := router.Group("/auth")
+	{
+		user.POST("/sign-up", h.SingUp)
+	}
+
 	return router
 }

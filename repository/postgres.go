@@ -9,6 +9,7 @@ import (
 
 const (
 	booksTable = "books"
+	usersTable = "users"
 )
 
 func NewPostgres(host, port, username, password, dbname, sslmode string) (*sql.DB, error) {

@@ -13,12 +13,18 @@ type Book interface {
 	DeleteBook(id int) error
 }
 
+type Auth interface {
+	CreateUser(user entities.User) (int, error)
+}
+
 type Service struct {
 	Book
+	Auth
 }
 
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		Book: NewBookService(repo.Book),
+		Auth: NewAuthService(repo.Auth),
 	}
 }
