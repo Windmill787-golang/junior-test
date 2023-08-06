@@ -1,6 +1,6 @@
 # Rest API CRUD for books
 
-Manipulate books via API\
+Manipulate books via API
 
 ## Instalation
 
@@ -31,7 +31,7 @@ go build
 
 ## Usage
 
-API url: [localhost:8000](localhost:8000)\
+API url: [localhost:8000](http://localhost:8000)\
 Endpoints for books observation:
 
 ```
