@@ -32,5 +32,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		user.POST("/sign-in", h.SingIn)
 	}
 
+	router.GET("/user-id", h.GetUserId)
+
 	return router
 }

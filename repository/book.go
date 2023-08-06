@@ -52,13 +52,13 @@ func (r *BookRepository) GetBooks() ([]*entities.Book, error) {
 func (r *BookRepository) CreateBook(book entities.Book) (int, error) {
 	sql := fmt.Sprintf("INSERT INTO %s "+
 		"(title, description, genre, author, page_count, year, price, user_id) "+
-		"VALUES ($1, $2, $3, $4, $5, $6, $7, 0) "+
+		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8) "+
 		"RETURNING id",
 		booksTable,
 	)
 
 	var id int
-	row := r.db.QueryRow(sql, book.Title, book.Description, book.Genre, book.Author, book.PageCount, book.Year, book.Price)
+	row := r.db.QueryRow(sql, book.Title, book.Description, book.Genre, book.Author, book.PageCount, book.Year, book.Price, book.UserId)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
