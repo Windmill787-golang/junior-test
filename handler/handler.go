@@ -17,11 +17,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.Default()
 
 	router.GET("/books", h.GetBooks)
+	router.GET("/book/:id", h.GetBook)
 
-	book := router.Group("/book")
+	book := router.Group("/book", h.userIdentity)
 	{
 		book.POST("/", h.CreateBook)
-		book.GET("/:id", h.GetBook)
 		book.PUT("/:id", h.UpdateBook)
 		book.DELETE("/:id", h.DeleteBook)
 	}

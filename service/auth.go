@@ -57,3 +57,23 @@ func (s *AuthService) GenerateToken(user entities.User) (string, error) {
 
 	return token.SignedString([]byte(os.Getenv("JWT_SIGN_KEY")))
 }
+
+func (s *AuthService) ParseToken(token string) (int, error) {
+	parsedToken, err := jwt.ParseWithClaims(token, &userClaims{}, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("invalid singing method")
+		}
+
+		return []byte(os.Getenv("JWT_SIGN_KEY")), nil
+	})
+	if err != nil {
+		return 0, nil
+	}
+
+	claims, ok := parsedToken.Claims.(*userClaims)
+	if !ok {
+		return 0, fmt.Errorf("token claims are not valid")
+	}
+
+	return claims.ID, nil
+}
