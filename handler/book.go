@@ -68,6 +68,7 @@ func (h *Handler) UpdateBook(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Validation error " + err.Error()})
 		return
 	}
+	book.ID = id
 
 	if err := h.service.UpdateBook(book); err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
