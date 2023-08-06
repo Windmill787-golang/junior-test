@@ -35,8 +35,8 @@ API url: [localhost:8000](localhost:8000)\
 Endpoints for books observation:
 
 ```
-GET /books 			- Get list of all books
-GET /book/:id 		- Get single book by id
+GET /books    - Get list of all books
+GET /book/:id - Get single book by id
 ```
 
 Guest user can only view list of books or single book.\
@@ -44,8 +44,8 @@ Authentication is needed to `create/update/delete` books\
 Available actions for authentication:
 
 ```
-POST /auth/sign-up 	- Registration
-POST /auth/sigh-in 	- Login
+POST /auth/sign-up - Registration
+POST /auth/sigh-in - Login
 ```
 
 Registration and authentication example body:
@@ -68,9 +68,9 @@ If you set valid token, you are able to `create/update/delete`books\
 Endpoints for books manipulations:
 
 ```
-POST /book 			- Create book
-PUT /book/:id 		- Update book
-DELETE /book/:id 	- Delete book
+POST /book       - Create book
+PUT /book/:id    - Update book
+DELETE /book/:id - Delete book
 ```
 
 User can `update/delete` only books he created.\
@@ -86,5 +86,4 @@ Books example body:
     "year": 1910,
     "price": 5000
 }
-
 ```
