@@ -67,7 +67,7 @@ func (s *AuthService) ParseToken(token string) (int, error) {
 		return []byte(os.Getenv("JWT_SIGN_KEY")), nil
 	})
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 
 	claims, ok := parsedToken.Claims.(*userClaims)
