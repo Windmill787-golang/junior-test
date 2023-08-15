@@ -42,6 +42,7 @@ func main() {
 
 	//create and run server that depends on handler routes
 	server := NewServer()
+
 	if err = server.Run(os.Getenv("SERVER_PORT"), handler.InitRoutes()); err != nil {
 		log.Fatal(err)
 	}
