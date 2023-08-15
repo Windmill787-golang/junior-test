@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -37,6 +38,10 @@ func (h *Handler) GetBooks(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, books)
+}
+
+func handleGetBooks(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Hello get books")
 }
 
 func (h *Handler) CreateBook(c *gin.Context) {
