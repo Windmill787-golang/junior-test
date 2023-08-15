@@ -8,25 +8,19 @@ Manipulate books via API
 2. Run docker container with postgres
 
 ```
-docker-compose up -d
+make up
 ```
 
 3. Apply migrations
 
 ```
-migrate -path ./database/migrations/ -database 'postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable' up
+make migrate-up
 ```
 
-4. Build
+4. Run application
 
 ```
-go build
-```
-
-5. Execute program
-
-```
-./junior-test
+make run
 ```
 
 ## Usage
