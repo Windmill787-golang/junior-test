@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/Windmill787-golang/junior-test/handler"
@@ -42,20 +40,10 @@ func main() {
 	//create handler that depends on service
 	handler := handler.NewHandler(service)
 
-	fmt.Println(handler)
-
 	//create and run server that depends on handler routes
 	server := NewServer()
 
-	//http handler
-	handlerFunc := func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Hello default handler")
-	}
-	handler2 := http.HandlerFunc(handlerFunc)
-
-	http.Handle("/hello", handler2)
-
-	if err = server.Run(os.Getenv("SERVER_PORT"), nil); err != nil {
+	if err = server.Run(os.Getenv("SERVER_PORT"), handler.InitRoutes()); err != nil {
 		log.Fatal(err)
 	}
 }
