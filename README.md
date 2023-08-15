@@ -7,19 +7,19 @@ Manipulate books via API
 1. Copy `.env.example` file to create `.env` file
 2. Run docker container with postgres
 
-```
+```bash
 make up
 ```
 
 3. Apply migrations
 
-```
+```bash
 make migrate-up
 ```
 
 4. Run application
 
-```
+```bash
 make run
 ```
 
@@ -44,10 +44,10 @@ POST /auth/sigh-in - Login
 
 Registration and authentication example body:
 
-```
+```json
 {
-    "username": "test",
-    "password": "123"
+  "username": "test",
+  "password": "123"
 }
 ```
 
@@ -70,14 +70,14 @@ DELETE /book/:id - Delete book
 User can `update/delete` only books he created.\
 Books example body:
 
-```
+```json
 {
-    "title": "Ktulhu",
-    "author": "Lovecraft",
-    "description": "Very scary book",
-    "genre": "horror",
-    "page_count": 546,
-    "year": 1910,
-    "price": 5000
+  "title": "Ktulhu",
+  "author": "Lovecraft",
+  "description": "Very scary book",
+  "genre": "horror",
+  "page_count": 546,
+  "year": 1910,
+  "price": 5000
 }
 ```
