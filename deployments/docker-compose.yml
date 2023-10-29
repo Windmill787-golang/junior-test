@@ -5,7 +5,7 @@ services:
     container_name: junior_test_psql
     ports:
       - ${DB_PORT}:5432
-    image: postgres
+    image: postgres:15
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}

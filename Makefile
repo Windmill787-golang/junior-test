@@ -1,6 +1,9 @@
 include .env
 export
 
+build:
+	@docker-compose -f deployments/docker-compose.yml up --build
+
 up:
 	@docker-compose -f deployments/docker-compose.yml up -d
 
