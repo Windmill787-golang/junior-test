@@ -7,6 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Sign up user
+// @Tags auth
+// @Description sign up user
+// @ID sign-up
+// @Accept  json
+// @Produce  json
+// @Param input body entities.User true "User info"
+// @Success 200 {object} string "Sign up successful"
+// @Failure 400 {object} string "Validation error"
+// @Failure 500 {object} string "Server error"
+// @Router /auth/sign-up [post]
 func (h *Handler) SingUp(c *gin.Context) {
 	var user entities.User
 
@@ -24,6 +35,17 @@ func (h *Handler) SingUp(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Sign up successful", "id": id})
 }
 
+// @Summary Sign in user
+// @Tags auth
+// @Description sign in user
+// @ID sign-in
+// @Accept  json
+// @Produce  json
+// @Param input body entities.User true "User info"
+// @Success 200 {object} string "Sign in successful"
+// @Failure 400 {object} string "Validation error"
+// @Failure 500 {object} string "Server error"
+// @Router /auth/sign-in [post]
 func (h *Handler) SingIn(c *gin.Context) {
 	var user entities.User
 
