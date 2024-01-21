@@ -18,3 +18,6 @@ migrate-down:
 
 run:
 	@go build -o app && ./app
+
+swag:
+	@swag init

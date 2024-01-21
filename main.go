@@ -10,6 +10,16 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// @title Book API
+// @description This is a sample Book CRUD API.
+// @version 1.0
+
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apiKey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	//repository<-service<-handlers<-routes<-server
 
@@ -31,19 +41,19 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//create repository that depents on database
-	repository := repository.NewRepository(db)
+	//create repository that depends on database
+	r := repository.NewRepository(db)
 
 	//create service that depends on repository
-	service := service.NewService(repository)
+	s := service.NewService(r)
 
 	//create handler that depends on service
-	handler := handler.NewHandler(service)
+	h := handler.NewHandler(s)
 
 	//create and run server that depends on handler routes
 	server := NewServer()
 
-	if err = server.Run(os.Getenv("SERVER_PORT"), handler.InitRoutes()); err != nil {
+	if err = server.Run(os.Getenv("SERVER_PORT"), h.InitRoutes()); err != nil {
 		log.Fatal(err)
 	}
 }

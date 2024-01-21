@@ -1,0 +1,89 @@
+basePath: /
+definitions:
+  entities.User:
+    properties:
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample Book CRUD API.
+  title: Book API
+  version: "1.0"
+paths:
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: sign in user
+      operationId: sign-in
+      parameters:
+      - description: User info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Sign in successful
+          schema:
+            type: string
+        "400":
+          description: Validation error
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Sign in user
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: sign up user
+      operationId: sign-up
+      parameters:
+      - description: User info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Sign up successful
+          schema:
+            type: string
+        "400":
+          description: Validation error
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Sign up user
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

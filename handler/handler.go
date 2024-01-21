@@ -3,6 +3,10 @@ package handler
 import (
 	"github.com/Windmill787-golang/junior-test/service"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+
+	_ "github.com/Windmill787-golang/junior-test/docs"
 )
 
 type Handler struct {
@@ -15,6 +19,8 @@ func NewHandler(service *service.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.Default()
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/books", h.GetBooks)
 	router.GET("/book/:id", h.GetBook)
