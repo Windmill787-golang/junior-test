@@ -23,4 +23,4 @@ run:
 	@go build -o junior-test cmd/junior-test/main.go && ./junior-test
 
 swag:
-	@swag init
+	@swag init -g ./internal/app/app.go

@@ -11,7 +11,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Run @title Book API
+// Run
+// @title Book API
 // @description This is a sample Book CRUD API.
 // @version 1.0
 // @host localhost:8080

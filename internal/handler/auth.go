@@ -7,7 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SingUp @Summary Sign up user
+// SingUp
+// @Summary Sign up user
 // @Tags auth
 // @Description sign up user
 // @ID sign-up
@@ -35,7 +36,8 @@ func (h *Handler) SingUp(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Sign up successful", "id": id})
 }
 
-// SingIn @Summary Sign in user
+// SingIn
+// @Summary Sign in user
 // @Tags auth
 // @Description sign in user
 // @ID sign-in
