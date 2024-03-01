@@ -1,14 +1,12 @@
-# Rest API CRUD for books
+# Junior Test task. Rest API CRUD for books
 
-Manipulate books via API
+## Installation
 
-## Instalation
-
-1. Copy `.env.example` file to create `.env` file
+1. Create `.env` file based on `.env.example`. Change values if needed
 2. Run docker container with postgres
 
 ```bash
-make up
+make docker-up
 ```
 
 3. Apply migrations
@@ -25,7 +23,7 @@ make run
 
 ## Usage
 
-API url: [localhost:8000](http://localhost:8000)\
+API url: [localhost:8000](http://localhost:8000) (port can be different, depending on `.env`)\
 Endpoints for books observation:
 
 ```
@@ -51,7 +49,7 @@ Registration and authentication example body:
 }
 ```
 
-After registration you can sign in to receive jwt token\
+After registration, you can sign in to receive jwt token\
 Then place your token to Authentication header
 
 ```
@@ -72,7 +70,7 @@ Books example body:
 
 ```json
 {
-  "title": "Ktulhu",
+  "title": "Cthulhu",
   "author": "Lovecraft",
   "description": "Very scary book",
   "genre": "horror",

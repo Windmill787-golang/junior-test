@@ -1,7 +1,7 @@
 include .env
 export
 
-build:
+docker-build:
 	@docker-compose -f deployments/docker-compose.yml up --build
 
 docker-up:
@@ -16,8 +16,11 @@ migrate-up:
 migrate-down:
 	@migrate -path ./internal/database/migrations/ -database 'postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_DATABASE)?sslmode=$(DB_SSLMODE)' down
 
+build:
+	@go build -o junior-test cmd/junior-test/main.go
+
 run:
-	@go build -o app cmd/junior-test/main.go && ./app
+	@go build -o junior-test cmd/junior-test/main.go && ./junior-test
 
 swag:
 	@swag init
