@@ -1,5 +1,38 @@
 basePath: /
 definitions:
+  entities.Book:
+    properties:
+      author:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      genre:
+        type: string
+      id:
+        type: integer
+      page_count:
+        type: integer
+      price:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+      year:
+        type: integer
+    required:
+    - author
+    - description
+    - genre
+    - page_count
+    - price
+    - title
+    - year
+    type: object
   entities.User:
     properties:
       id:
@@ -12,11 +45,11 @@ definitions:
     - password
     - username
     type: object
-host: localhost:8080
+host: localhost:8000
 info:
   contact: {}
   description: This is a sample Book CRUD API.
-  title: Book API
+  title: Books CRUD API
   version: "1.0"
 paths:
   /auth/sign-in:
@@ -47,7 +80,7 @@ paths:
           description: Server error
           schema:
             type: string
-      summary: Sign in user
+      summary: Sign in
       tags:
       - auth
   /auth/sign-up:
@@ -78,11 +111,95 @@ paths:
           description: Server error
           schema:
             type: string
-      summary: Sign up user
+      summary: Sign up
       tags:
       - auth
+  /book:
+    post:
+      consumes:
+      - application/json
+      description: Create new book
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book created
+          schema:
+            type: string
+        "400":
+          description: Validation error
+          schema:
+            type: string
+        "404":
+          description: Book not found
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Book create
+      tags:
+      - books
+  /book/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get book info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Book'
+        "400":
+          description: ID is not provided
+          schema:
+            type: string
+        "404":
+          description: Book not found
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Book view
+      tags:
+      - books
+  /books:
+    get:
+      consumes:
+      - application/json
+      description: Get books list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Book'
+            type: array
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Books list
+      tags:
+      - books
 securityDefinitions:
-  ApiKeyAuth:
+  Bearer:
     in: header
     name: Authorization
     type: apiKey

@@ -12,12 +12,12 @@ import (
 )
 
 // Run
-// @title Book API
+// @title Books CRUD API
 // @description This is a sample Book CRUD API.
 // @version 1.0
-// @host localhost:8080
+// @host localhost:8000
 // @BasePath /
-// @securityDefinitions.apiKey ApiKeyAuth
+// @securityDefinitions.apiKey Bearer
 // @in header
 // @name Authorization
 func Run() {
