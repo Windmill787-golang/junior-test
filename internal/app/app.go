@@ -39,14 +39,7 @@ func Run() {
 	}
 
 	//init database
-	db, err := repository.NewPostgres(
-		c.Postgres.Host,
-		c.Postgres.Port,
-		c.Postgres.Username,
-		c.Postgres.Password,
-		c.Postgres.Database,
-		c.Postgres.SSLMode,
-	)
+	db, err := repository.NewPostgres(&c.Postgres)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,9 +54,10 @@ func Run() {
 	h := handler.NewHandler(s)
 
 	//create and run server that depends on handler routes
-	ser := server.NewServer()
+	ser := server.NewServer(&c.Server)
 
-	if err = ser.Run(c.Server.Port, h.InitRoutes()); err != nil {
+	//run server
+	if err = ser.Run(&c.Server, h.InitRoutes()); err != nil {
 		log.Fatal(err)
 	}
 }
