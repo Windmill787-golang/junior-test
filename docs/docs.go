@@ -129,7 +129,7 @@ const docTemplate = `{
                 "summary": "Book create",
                 "parameters": [
                     {
-                        "description": "query params",
+                        "description": "book info",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -306,24 +306,17 @@ const docTemplate = `{
                 }
             }
         }
-    },
-    "securityDefinitions": {
-        "Bearer": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
-        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:8000",
-	BasePath:         "/",
+	Version:          "",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Books CRUD API",
-	Description:      "This is a sample Book CRUD API.",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

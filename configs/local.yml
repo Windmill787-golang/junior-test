@@ -1,0 +1,6 @@
+server:
+  readTimeout: 5
+
+auth:
+  AccessTokenTTL: 15m
+  RefreshTokenTTL: 1h

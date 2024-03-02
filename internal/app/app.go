@@ -1,14 +1,18 @@
 package app
 
 import (
-	"log"
-	"os"
-
+	"github.com/Windmill787-golang/junior-test/internal/config"
 	"github.com/Windmill787-golang/junior-test/internal/handler"
 	"github.com/Windmill787-golang/junior-test/internal/repository"
 	"github.com/Windmill787-golang/junior-test/internal/server"
 	"github.com/Windmill787-golang/junior-test/internal/service"
 	"github.com/joho/godotenv"
+	"log"
+)
+
+const (
+	ConfigDir  = "configs"
+	ConfigFile = "main"
 )
 
 // Run
@@ -28,14 +32,20 @@ func Run() {
 		log.Fatal(err)
 	}
 
+	//load config
+	c, err := config.New(ConfigDir, ConfigFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	//init database
 	db, err := repository.NewPostgres(
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_USERNAME"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_DATABASE"),
-		os.Getenv("DB_SSLMODE"),
+		c.Postgres.Host,
+		c.Postgres.Port,
+		c.Postgres.Username,
+		c.Postgres.Password,
+		c.Postgres.Database,
+		c.Postgres.SSLMode,
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -53,7 +63,7 @@ func Run() {
 	//create and run server that depends on handler routes
 	ser := server.NewServer()
 
-	if err = ser.Run(os.Getenv("SERVER_PORT"), h.InitRoutes()); err != nil {
+	if err = ser.Run(c.Server.Port, h.InitRoutes()); err != nil {
 		log.Fatal(err)
 	}
 }

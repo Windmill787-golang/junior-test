@@ -1,13 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample Book CRUD API.",
-        "title": "Books CRUD API",
-        "contact": {},
-        "version": "1.0"
+        "contact": {}
     },
-    "host": "localhost:8000",
-    "basePath": "/",
     "paths": {
         "/auth/sign-in": {
             "post": {
@@ -123,7 +118,7 @@
                 "summary": "Book create",
                 "parameters": [
                     {
-                        "description": "query params",
+                        "description": "book info",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -299,13 +294,6 @@
                     "type": "string"
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "Bearer": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         }
     }
 }

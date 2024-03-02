@@ -1,0 +1,8 @@
+server:
+  readTimeout: 10
+  writeTimeout: 10
+  maxHeaderMB: 1
+
+auth:
+  accessTokenTTL: 2h
+  refreshTokenTTL: 720h # 30 days

@@ -66,7 +66,7 @@ func (h *Handler) GetBook(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Security     Bearer
-// @Param        request body entities.Book true "query params"
+// @Param        request body entities.Book true "book info"
 // @Success      200  {object} string "Book created"
 // @Failure      400  {object} string "Validation error"
 // @Failure      404  {object} string "Book not found"

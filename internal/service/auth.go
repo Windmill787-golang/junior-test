@@ -55,7 +55,7 @@ func (s *AuthService) GenerateToken(user entities.User) (string, error) {
 		id,
 	})
 
-	return token.SignedString([]byte(os.Getenv("JWT_SIGN_KEY")))
+	return token.SignedString([]byte(os.Getenv("AUTH_SIGN_KEY")))
 }
 
 func (s *AuthService) ParseToken(token string) (int, error) {
@@ -64,7 +64,7 @@ func (s *AuthService) ParseToken(token string) (int, error) {
 			return nil, fmt.Errorf("invalid singing method")
 		}
 
-		return []byte(os.Getenv("JWT_SIGN_KEY")), nil
+		return []byte(os.Getenv("AUTH_SIGN_KEY")), nil
 	})
 	if err != nil {
 		return 0, err
