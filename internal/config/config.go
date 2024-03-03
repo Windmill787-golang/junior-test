@@ -25,8 +25,6 @@ type Server struct {
 type Auth struct {
 	AccessTokenTTL  string
 	RefreshTokenTTL string
-	SignKey         string `mapstructure:"sign_key"`
-	Salt            string
 }
 
 type Config struct {
@@ -73,12 +71,6 @@ func New(folder, filename string) (*Config, error) {
 		return nil, err
 	}
 	if err := viper.BindEnv("postgres.sslmode", "POSTGRES_SSLMODE"); err != nil {
-		return nil, err
-	}
-	if err := viper.BindEnv("auth.salt", "AUTH_SALT"); err != nil {
-		return nil, err
-	}
-	if err := viper.BindEnv("auth.sign_key", "AUTH_SIGN_KEY"); err != nil {
 		return nil, err
 	}
 

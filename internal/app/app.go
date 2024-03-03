@@ -1,13 +1,15 @@
 package app
 
 import (
+	"log"
+
 	"github.com/Windmill787-golang/junior-test/internal/config"
 	"github.com/Windmill787-golang/junior-test/internal/handler"
 	"github.com/Windmill787-golang/junior-test/internal/repository"
 	"github.com/Windmill787-golang/junior-test/internal/server"
 	"github.com/Windmill787-golang/junior-test/internal/service"
+
 	"github.com/joho/godotenv"
-	"log"
 )
 
 const (
