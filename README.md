@@ -3,7 +3,7 @@
 ## Installation
 
 1. Create `.env` file based on `.env.example`. Change values if needed
-2. Run docker container with postgres
+2. Run docker container
 
 ```bash
 make docker-up
