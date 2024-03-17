@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/Windmill787-golang/junior-test/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
+	"net/http"
 
 	_ "github.com/Windmill787-golang/junior-test/docs"
 )
@@ -41,4 +44,33 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.GET("/user-id", h.GetUserId)
 
 	return router
+}
+
+func (h *Handler) InitRoutesNew() {
+	http.HandleFunc("/books", func(w http.ResponseWriter, r *http.Request) {
+		books, err := h.service.GetBooks()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			//log
+			return
+		}
+
+		resp, err := json.Marshal(books)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			//log
+			return
+		}
+
+		n, err := w.Write(resp)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			//log
+			return
+		}
+		fmt.Println(n)
+	})
 }

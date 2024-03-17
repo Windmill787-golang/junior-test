@@ -56,10 +56,10 @@ func Run() {
 	h := handler.NewHandler(s)
 
 	//create and run server that depends on handler routes
-	ser := server.NewServer(&c.Server)
+	ser := server.NewServer(h, &c.Server)
 
 	//run server
-	if err = ser.Run(&c.Server, h.InitRoutes()); err != nil {
+	if err = ser.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
