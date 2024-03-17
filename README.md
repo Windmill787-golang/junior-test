@@ -1,6 +1,6 @@
 # Junior Test task. Rest API CRUD for books
 
-This project provides a REST API for managing a collection of books, allowing basic CRUD (Create, Read, Update, Delete) operations. It's built using [your technology stack, e.g., Node.js, Express, MongoDB] and is containerized using Docker for easy setup and deployment.
+This project provides a REST API for managing a collection of books, allowing basic CRUD (Create, Read, Update, Delete) operations. 
 
 ## Features
 
