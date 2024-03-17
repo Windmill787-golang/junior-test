@@ -1,19 +1,19 @@
 include .env
 
 docker-build:
-	@docker-compose -f deployments/docker-compose.yml up --build
+	@docker-compose -f deployments/docker-compose.yml -p junior-test up --build
 
 docker-up:
-	@docker-compose -f deployments/docker-compose.yml up -d
+	@docker-compose -f deployments/docker-compose.yml -p junior-test up -d
 
 docker-down:
-	@docker-compose -f deployments/docker-compose.yml down
+	@docker-compose -f deployments/docker-compose.yml -p junior-test down
 
 migrate-up:
-	@migrate -path ./internal/database/migrations/ -database 'postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_DATABASE)?sslmode=$(DB_SSLMODE)' up
+	@migrate -path ./internal/database/migrations/ -database 'postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DATABASE)?sslmode=$(POSTGRES_SSLMODE)' up
 
 migrate-down:
-	@migrate -path ./internal/database/migrations/ -database 'postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_DATABASE)?sslmode=$(DB_SSLMODE)' down
+	@migrate -path ./internal/database/migrations/ -database 'postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DATABASE)?sslmode=$(POSTGRES_SSLMODE)' down
 
 build:
 	@go build -o junior-test cmd/junior-test/main.go
