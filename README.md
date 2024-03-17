@@ -1,5 +1,19 @@
 # Junior Test task. Rest API CRUD for books
 
+This project provides a REST API for managing a collection of books, allowing basic CRUD (Create, Read, Update, Delete) operations. It's built using [your technology stack, e.g., Node.js, Express, MongoDB] and is containerized using Docker for easy setup and deployment.
+
+## Features
+
+- CRUD operations for books
+- Dockerized environment for easy setup
+- Swagger documentation for API endpoints
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+- Docker and Docker Compose
+- Make (for running Makefile commands)
+
 ## Installation
 
 1. Create `.env` file based on `.env.example`. Change values if needed
@@ -23,59 +37,5 @@ make run
 
 ## Usage
 
-API url: [localhost:8000](http://localhost:8000) (port can be different, depending on `.env`)\
-Endpoints for books observation:
-
-```
-GET /books    - Get list of all books
-GET /book/:id - Get single book by id
-```
-
-Guest user can only view list of books or single book.\
-Authentication is needed to `create/update/delete` books\
-Available actions for authentication:
-
-```
-POST /auth/sign-up - Registration
-POST /auth/sigh-in - Login
-```
-
-Registration and authentication example body:
-
-```json
-{
-  "username": "test",
-  "password": "123"
-}
-```
-
-After registration, you can sign in to receive jwt token\
-Then place your token to Authentication header
-
-```
-Authentication: Bearer <your_token_here>
-```
-
-If you set valid token, you are able to `create/update/delete`books\
-Endpoints for books manipulations:
-
-```
-POST /book       - Create book
-PUT /book/:id    - Update book
-DELETE /book/:id - Delete book
-```
-
-User can `update/delete` only books he created.\
-Books example body:
-
-```json
-{
-  "title": "Cthulhu",
-  "author": "Lovecraft",
-  "description": "Very scary book",
-  "genre": "horror",
-  "page_count": 546,
-  "year": 1910,
-  "price": 5000
-}
-```
+API Base URL: [localhost:8000](http://localhost:8000)\
+Swagger Documentation: For a detailed look at the available API endpoints and their specifications, visit the Swagger documentation at: [localhost:8000/swagger/index.html](http://localhost:8000/swagger/index.html)
