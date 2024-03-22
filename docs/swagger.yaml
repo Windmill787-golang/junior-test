@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   entities.Book:
     properties:
@@ -44,8 +45,12 @@ definitions:
     - password
     - username
     type: object
+host: localhost:8000
 info:
   contact: {}
+  description: This is a sample Book CRUD API.
+  title: Books CRUD API
+  version: "1.0"
 paths:
   /auth/sign-in:
     post:
@@ -193,4 +198,9 @@ paths:
       summary: Books list
       tags:
       - books
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

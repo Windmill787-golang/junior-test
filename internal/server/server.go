@@ -31,9 +31,5 @@ func (s *Server) Shutdown() {
 }
 
 func (s *Server) Run() error {
-	s.httpServer.Addr = ":" + s.port
-	//s.httpServer.Handler = handler
-	s.handler.InitRoutesNew()
-
-	return s.httpServer.ListenAndServe()
+	return http.ListenAndServe(":"+s.port, s.handler.InitRoutes())
 }

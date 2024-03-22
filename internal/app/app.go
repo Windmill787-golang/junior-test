@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/Windmill787-golang/junior-test/internal/config"
@@ -57,6 +58,8 @@ func Run() {
 
 	//create and run server that depends on handler routes
 	ser := server.NewServer(h, &c.Server)
+
+	fmt.Println("Running server...")
 
 	//run server
 	if err = ser.Run(); err != nil {

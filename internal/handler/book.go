@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -17,14 +18,49 @@ import (
 // @Success      200  {array} entities.Book
 // @Failure      500  {object} string "Server error"
 // @Router       /books [get]
-func (h *Handler) GetBooks(c *gin.Context) {
+//func (h *Handler) GetBooks(c *gin.Context) {
+//	books, err := h.service.GetBooks()
+//	if err != nil {
+//		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+//		return
+//	}
+//
+//	c.IndentedJSON(http.StatusOK, books)
+//}
+
+// GetBooks      godoc
+// @Summary      Books list
+// @Description  Get books list
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Success      200  {array} entities.Book
+// @Failure      500  {object} string "Server error"
+// @Router       /books [get]
+func (h *Handler) GetBooks(w http.ResponseWriter, r *http.Request) {
 	books, err := h.service.GetBooks()
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		//TODO: log
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, books)
+	resp, err := json.Marshal(books)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		//TODO: log
+		return
+	}
+
+	_, err = w.Write(resp)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		//TODO: log
+		return
+	}
 }
 
 // GetBook       godoc
