@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"github.com/go-chi/chi/v5"
 	"net/http"
 	"strconv"
 
@@ -74,25 +75,42 @@ func (h *Handler) GetBooks(w http.ResponseWriter, r *http.Request) {
 // @Failure      404  {object} string "Book not found"
 // @Failure      500  {object} string "Server error"
 // @Router       /book/{id} [get]
-func (h *Handler) GetBook(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
+func (h *Handler) GetBook(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Server error"))
+		return
+	}
 	if id == 0 {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "ID is not provided"})
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Id is not provided"))
 		return
 	}
 
 	book, err := h.service.GetBook(id)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Server error"))
+		//log "Server error " + err.Error()
 		return
 	}
 
 	if book == nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book not found"})
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Book not found"))
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, book)
+	resp, err := json.Marshal(book)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Server error"))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 }
 
 // CreateBook    godoc

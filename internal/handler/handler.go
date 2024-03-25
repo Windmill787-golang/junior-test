@@ -1,11 +1,10 @@
 package handler
 
 import (
-	httpSwagger "github.com/swaggo/http-swagger"
-	"net/http"
-
 	_ "github.com/Windmill787-golang/junior-test/docs"
 	"github.com/Windmill787-golang/junior-test/internal/service"
+	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type Handler struct {
@@ -16,15 +15,18 @@ func NewHandler(service *service.Service) *Handler {
 	return &Handler{service}
 }
 
-func (h *Handler) InitRoutes() *http.ServeMux {
-	router := http.DefaultServeMux
-	router.HandleFunc("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:8000/swagger/swagger.json")),
-	)
+func (h *Handler) InitRoutes() *chi.Mux {
+	r := chi.NewRouter()
 
-	router.HandleFunc("/books", h.GetBooks)
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"),
+	))
 
-	//router.GET("/book/:id", h.GetBook)
+	r.Route("/books", func(r chi.Router) {
+		r.Get("/{id:[0-9]+}", h.GetBook)
+		r.Get("/", h.GetBooks)
+	})
+
 	//
 	//book := router.Group("/book", h.userIdentity)
 	//{
@@ -41,5 +43,5 @@ func (h *Handler) InitRoutes() *http.ServeMux {
 	//
 	//router.GET("/user-id", h.GetUserId)
 
-	return router
+	return r
 }
