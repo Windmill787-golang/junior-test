@@ -9,6 +9,9 @@ docker-up:
 docker-down:
 	@docker-compose -f deployments/docker-compose.yml -p junior-test down
 
+docker-shell:
+	@docker exec -it postgres sh -c 'psql -U $(POSTGRES_USERNAME) -d $(POSTGRES_DATABASE)'
+
 migrate-up:
 	@migrate -path ./internal/database/migrations/ -database 'postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DATABASE)?sslmode=$(POSTGRES_SSLMODE)' up
 

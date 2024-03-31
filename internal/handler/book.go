@@ -2,7 +2,9 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-playground/validator/v10"
 	"net/http"
 	"strconv"
 
@@ -19,49 +21,15 @@ import (
 // @Success      200  {array} entities.Book
 // @Failure      500  {object} string "Server error"
 // @Router       /books [get]
-//func (h *Handler) GetBooks(c *gin.Context) {
-//	books, err := h.service.GetBooks()
-//	if err != nil {
-//		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
-//		return
-//	}
-//
-//	c.IndentedJSON(http.StatusOK, books)
-//}
-
-// GetBooks      godoc
-// @Summary      Books list
-// @Description  Get books list
-// @Tags         books
-// @Accept       json
-// @Produce      json
-// @Success      200  {array} entities.Book
-// @Failure      500  {object} string "Server error"
-// @Router       /books [get]
 func (h *Handler) GetBooks(w http.ResponseWriter, r *http.Request) {
 	books, err := h.service.GetBooks()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		//TODO: log
 		return
 	}
 
-	resp, err := json.Marshal(books)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-		//TODO: log
-		return
-	}
-
-	_, err = w.Write(resp)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-		//TODO: log
-		return
-	}
+	h.RespondWithData(w, http.StatusOK, books)
 }
 
 // GetBook       godoc
@@ -78,39 +46,28 @@ func (h *Handler) GetBooks(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) GetBook(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Server error"))
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		//TODO: log
 		return
 	}
 	if id == 0 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Id is not provided"))
+		h.RespondWithError(w, http.StatusBadRequest, "Id is not provided")
 		return
 	}
 
 	book, err := h.service.GetBook(id)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Server error"))
-		//log "Server error " + err.Error()
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		//TODO: log
 		return
 	}
 
 	if book == nil {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte("Book not found"))
+		h.RespondWithError(w, http.StatusNotFound, "Book does not exist")
 		return
 	}
 
-	resp, err := json.Marshal(book)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Server error"))
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(resp)
+	h.RespondWithData(w, http.StatusOK, book)
 }
 
 // CreateBook    godoc
@@ -126,22 +83,33 @@ func (h *Handler) GetBook(w http.ResponseWriter, r *http.Request) {
 // @Failure      404  {object} string "Book not found"
 // @Failure      500  {object} string "Server error"
 // @Router       /book [post]
-func (h *Handler) CreateBook(c *gin.Context) {
+func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	var book entities.Book
 
-	if err := c.BindJSON(&book); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Validation error " + err.Error()})
+	defer r.Body.Close()
+
+	err := json.NewDecoder(r.Body).Decode(&book)
+	if err != nil {
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	book.UserId = getUserId(c)
+
+	validate := validator.New()
+	err = validate.Struct(book)
+	if err != nil {
+		h.RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Validation error:\n%s", err.(validator.ValidationErrors)))
+		return
+	}
+
+	//set user from token
 
 	id, err := h.service.CreateBook(book)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "Book created", "id": id})
+	h.RespondWithMessage(w, http.StatusCreated, fmt.Sprintf("Book created. Id: %d", id))
 }
 
 func (h *Handler) UpdateBook(c *gin.Context) {
