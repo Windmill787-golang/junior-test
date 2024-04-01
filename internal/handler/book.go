@@ -3,13 +3,13 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-playground/validator/v10"
 	"net/http"
 	"strconv"
 
 	"github.com/Windmill787-golang/junior-test/internal/entities"
-	"github.com/gin-gonic/gin"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-playground/validator/v10"
 )
 
 // GetBooks      godoc
@@ -184,43 +184,60 @@ func (h *Handler) UpdateBook(w http.ResponseWriter, r *http.Request) {
 	h.RespondWithMessage(w, http.StatusCreated, "Book updated")
 }
 
-func (h *Handler) DeleteBook(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	if id == 0 {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "ID is not provided"})
+func (h *Handler) DeleteBook(w http.ResponseWriter, r *http.Request) {
+	//extract id from request url params
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		//TODO: log
 		return
 	}
 
+	//check if id is not empty
+	if id == 0 {
+		h.RespondWithError(w, http.StatusBadRequest, "Id is not provided")
+		return
+	}
+
+	//get book by id
 	exist, err := h.service.GetBook(id)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		//TODO: log
 		return
 	}
 
-	if exist.UserId != getUserId(c) {
-		c.IndentedJSON(http.StatusForbidden, gin.H{"message": "You dont have access to delete this book"})
+	//check if book exists
+	if exist == nil {
+		h.RespondWithError(w, http.StatusNotFound, "Book does not exist")
 		return
 	}
 
-	if err := h.service.DeleteBook(id); err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+	//TODO: check if user has access to update this book
+	//if exist.UserId != getUserId(c) {
+	//	c.IndentedJSON(http.StatusForbidden, gin.H{"message": "You dont have access to delete this book"})
+	//	return
+	//}
+
+	if err = h.service.DeleteBook(id); err != nil {
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "Book deleted"})
+	h.RespondWithMessage(w, http.StatusOK, "Book deleted")
 }
 
-func (h *Handler) GetUserId(c *gin.Context) {
-	id, _ := c.Get("userId")
-	c.IndentedJSON(http.StatusOK, gin.H{"userId": id})
-}
+//func (h *Handler) GetUserId(c *gin.Context) {
+//	id, _ := c.Get("userId")
+//	c.IndentedJSON(http.StatusOK, gin.H{"userId": id})
+//}
 
-func getUserId(c *gin.Context) int {
-	userId, exist := c.Get("userId")
-	if !exist {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Authorization needed"})
-		return 0
-	}
-
-	return userId.(int)
-}
+//func getUserId(c *gin.Context) int {
+//	userId, exist := c.Get("userId")
+//	if !exist {
+//		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Authorization needed"})
+//		return 0
+//	}
+//
+//	return userId.(int)
+//}
