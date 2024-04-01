@@ -38,6 +38,7 @@ func (h *Handler) InitRoutes() *chi.Mux {
 		r.Get("/{id:[0-9]+}", h.GetBook)
 		r.Get("/", h.GetBooks)
 		r.Post("/", h.CreateBook)
+		r.Put("/{id:[0-9]+}", h.UpdateBook)
 	})
 
 	//

@@ -44,17 +44,21 @@ func (h *Handler) GetBooks(w http.ResponseWriter, r *http.Request) {
 // @Failure      500  {object} string "Server error"
 // @Router       /book/{id} [get]
 func (h *Handler) GetBook(w http.ResponseWriter, r *http.Request) {
+	//extract id from request url params
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		//TODO: log
 		return
 	}
+
+	//check if id is not empty
 	if id == 0 {
 		h.RespondWithError(w, http.StatusBadRequest, "Id is not provided")
 		return
 	}
 
+	//get book by id
 	book, err := h.service.GetBook(id)
 	if err != nil {
 		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
@@ -62,6 +66,7 @@ func (h *Handler) GetBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//check if book exists
 	if book == nil {
 		h.RespondWithError(w, http.StatusNotFound, "Book does not exist")
 		return
@@ -88,12 +93,14 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
+	//unmarshaling
 	err := json.NewDecoder(r.Body).Decode(&book)
 	if err != nil {
 		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
+	//validation
 	validate := validator.New()
 	err = validate.Struct(book)
 	if err != nil {
@@ -101,8 +108,9 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//set user from token
+	//TODO: set user from token
 
+	//create book
 	id, err := h.service.CreateBook(book)
 	if err != nil {
 		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
@@ -112,42 +120,68 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	h.RespondWithMessage(w, http.StatusCreated, fmt.Sprintf("Book created. Id: %d", id))
 }
 
-func (h *Handler) UpdateBook(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	if id == 0 {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "ID is not provided"})
+func (h *Handler) UpdateBook(w http.ResponseWriter, r *http.Request) {
+	//extract id from request url params
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		//TODO: log
 		return
 	}
 
+	//check if id is not empty
+	if id == 0 {
+		h.RespondWithError(w, http.StatusBadRequest, "Id is not provided")
+		return
+	}
+
+	//get book by id
 	exist, err := h.service.GetBook(id)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		//TODO: log
 		return
 	}
 
+	//check if book exists
 	if exist == nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book not found"})
+		h.RespondWithError(w, http.StatusNotFound, "Book does not exist")
 		return
 	}
 
-	if exist.UserId != getUserId(c) {
-		c.IndentedJSON(http.StatusForbidden, gin.H{"message": "You dont have access to edit this book"})
-		return
-	}
+	//TODO: check if user has access to update this book
+	//if exist.UserId != getUserId(c) {
+	//	c.IndentedJSON(http.StatusForbidden, gin.H{"message": "You dont have access to edit this book"})
+	//	return
+	//}
 
 	var book entities.Book
-	if err := c.BindJSON(&book); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Validation error " + err.Error()})
+
+	defer r.Body.Close()
+
+	//unmarshaling
+	err = json.NewDecoder(r.Body).Decode(&book)
+	if err != nil {
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	//validation
+	validate := validator.New()
+	err = validate.Struct(book)
+	if err != nil {
+		h.RespondWithError(w, http.StatusBadRequest, fmt.Sprintf("Validation error:\n%s", err.(validator.ValidationErrors)))
 		return
 	}
 	book.ID = id
 
-	if err := h.service.UpdateBook(book); err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Server error " + err.Error()})
+	//update book
+	if err = h.service.UpdateBook(book); err != nil {
+		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "Book updated"})
+	h.RespondWithMessage(w, http.StatusCreated, "Book updated")
 }
 
 func (h *Handler) DeleteBook(c *gin.Context) {
